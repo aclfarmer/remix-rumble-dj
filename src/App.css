@@ -1,0 +1,76 @@
+#_root {
+  overflow-x: hidden;
+  background-color: #171717;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#blob-container {
+  position: absolute;
+  overflow: hidden;
+  height: 100%;
+  width: 100%; 
+  z-index: 0;
+}
+
+#blob {
+  background: linear-gradient(
+    to right,
+    #f04d82,
+    #ac79c7,
+    #0cbecf
+  );
+  height:250px;
+  aspect-ratio: 1;
+  position:absolute;
+  left:50%;
+  top:50%;
+  translate: -50% -50%;
+  border-radius: 50%;
+  animation: rotate 20s infinite;
+  overflow-x: hidden;
+}
+
+#blur {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  z-index: 2;
+  backdrop-filter: blur(12vmax);
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+@keyframes rotate {
+  from {
+    rotate: 0deg;
+  }
+  50% {
+    scale: 1 1.5;
+  }
+
+  to {
+    rotate: 360deg;
+  }
+}
+
+.root-container {
+  max-width: 1600px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+  z-index: 100;
+  justify-content: center;
+  display: flex;
+  overflow-x: hidden;
+}
+
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 30px 0 rgba(31, 38, 135, 0.07);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+}

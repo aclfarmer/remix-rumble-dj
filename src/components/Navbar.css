@@ -1,0 +1,29 @@
+.navigation-top {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+
+    height:200px;
+    justify-content: center;
+}
+
+.dj-container {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    position:relative;
+}
+
+.navbar-button:hover path {
+    fill: #fff;
+    transition: 0.2s ease-in-out;
+}
+
+.navbar-settings {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; /* Add this */
+    right: 0;
+    width:175px;
+}
