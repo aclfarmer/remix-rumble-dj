@@ -1,63 +1,127 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 
+import { MusicList } from '../assets/base64/MusicList';
 import * as teamSVGList from './svg/teamSVGList';
 import * as switchSVGList from './svg/switchSVGList';
 
-function renderCards() {
-  return Object.keys(teamSVGList).flatMap(key => {
-    const TeamSVGComponent = teamSVGList[key];
+import FlameColorContext from './FlameColorContext';
+
+    // Define the number of small cards for each TEAMSVG card
+    const teamSVGCardCounts_early = {
+      heartsteel: ['early_main', 'early_secondary', 'early_drums'],
+      kda: ['early_main', 'early_secondary', 'early_drums'],
+      penta: ['early_main', 'early_secondary', 'early_drums'],
+      truedmg: ['early_main', 'early_secondary', 'early_drums'],
+      eightbit: ['early_main', 'early_drums'],
+      country: ['early_main', 'early_drums'],
+      disco: ['early_main', 'early_drums'],
+      edm: ['early_main', 'early_drums'],
+      emo: ['early_main', 'early_drums'],
+      punk: ['early_main', 'early_secondary'],
+      hyper: ['early_main'],
+      illbeats: ['early_main'],
+      jazz: ['early_main'],
+      maestro: ['early_main'],
+      mix: ['early_main'],
+    };
+
+    const teamSVGCardCounts_late = {
+      heartsteel: ['late_main', 'late_secondary', 'late_drums'],
+      kda: ['late_main', 'late_secondary', 'late_drums'],
+      penta: ['late_main', 'late_secondary', 'late_drums'],
+      truedmg: ['late_main', 'late_secondary', 'late_drums'], 
+      eightbit: ['late_main', 'late_drums'],
+      country: ['late_main', 'late_drums'],
+      disco: ['late_main', 'late_drums'],
+      edm: ['late_main', 'late_drums'],
+      emo: ['late_main', 'late_drums'],
+      punk: ['late_main', 'late_secondary'],
+      hyper: ['late_main'],
+      illbeats: ['late_main'],
+      jazz: ['late_main'],
+      maestro: ['late_main'],
+      mix: ['late_main'],
+    };
+
+    const teamOrder = ['heartsteel', 'kda', 'penta', 'truedmg', 'eightbit', 'country', 'disco', 'edm', 'emo', 'punk', 'hyper', 'illbeats', 'jazz', 'maestro', 'mix'];
+
+    function renderCards(currentArray, clicked, handleClick, setSelectedMusic, setPlay) {
+      return teamOrder.map(key => {
+        const TeamSVGComponent = teamSVGList[key];
+    
+        const mainCard = (
+          <div className={`card ${clicked ? 'clicked' : ''}`} key={key} onClick={() => handleClick(key)}>
+            <div className='card-border'/>
+            <div className="card-content">
+              <div className="card-image">
+                <TeamSVGComponent color={clicked[key] ? '#fff' : undefined} width='100%' height='40px' />
+              </div>
+            </div>
+          </div>
+        );
+    
+        const smallCards = [];
+        
+        //console.log('teamSVGCardCounts_early keys:', Object.keys(teamSVGCardCounts_early));
+        //console.log('switchSVGList keys:', Object.keys(switchSVGList));
+    
+        const cardTypes = currentArray[key] || [];
+        cardTypes.forEach((cardType, index) => {
+          const SwitchSVGComponent = switchSVGList[cardType];
+          if (!SwitchSVGComponent) {
+            console.warn(`Missing component for key: ${cardType}`);
+            return;
+          }
+    
+          
+          const buttonKey = `${key}_${cardType}`;
+          smallCards.push(
+            <div className='card small' key={buttonKey} onClick={() =>{ 
+              handleClick(buttonKey);
+              if (clicked[buttonKey]) {
+                setSelectedMusic(null); // or setSelectedMusic(undefined);
+                setPlay(false);
+              } else {
+                setSelectedMusic(MusicList[buttonKey]);
+                setPlay(true);
+                console.log('Selected Music:', MusicList[buttonKey]);
+              }
+            }}>
+              <div className='card-border'/>
+              <div className={`card-content ${clicked[buttonKey] ? cardType : ''}`}>
+                <div className="card-image">
+                  <SwitchSVGComponent color={clicked[buttonKey] ? '#fff' : undefined} width='100%' height='22px' />
+                </div>
+              </div>
+            </div>
+          );
+        });
+    
+        return (
+          <div className="card-row" key={key}>
+            {mainCard}
+            {smallCards}
+          </div>
+        );
+      });
+    }
+
+const MusicBar = ({setSelectedMusic, setPlay}) => {
+    const cardsRef = useRef(null);
+    const [currentArray, setCurrentArray] = useState('teamSVGCardCounts_early');
     const [clicked, setClicked] = useState(false);
+    //css handling
+    const { switchFlameColors } = useContext(FlameColorContext);
+    const [isRushActive, setIsRushActive] = useState(false);
+
 
     const handleClick = (buttonKey) => {
       console.log('Card clicked:', clicked[buttonKey] ? clicked[buttonKey] : 'false', 'Button:', buttonKey);
       setClicked(prevState => ({ ...prevState, [buttonKey]: !prevState[buttonKey] }));
     };
-    
 
-    const mainCard = (
-      <div className={`card ${clicked ? 'clicked' : ''}`} key={key} onClick={() => handleClick(key)}>
-        <div className='card-border'/>
-        <div className="card-content">
-          <div className="card-image">
-            <TeamSVGComponent color={clicked[key] ? '#fff' : undefined} width='100%' height='40px' />
-          </div>
-        </div>
-      </div>
-    );
-
-
-    const order = ['trebble', 'bass', 'percussion'];
-
-    const smallCards = order.map((switchKey) => {
-      const SwitchSVGComponent = switchSVGList[switchKey];
-      if (!SwitchSVGComponent) {
-        console.warn(`Missing component for key: ${switchKey}`);
-        return null;
-      }
-      const buttonKey = `${key}-${switchKey}`;
-      return (
-        <div className='card small' key={buttonKey} onClick={() => handleClick(buttonKey)}>
-          <div className='card-border'/>
-          <div className={`card-content ${clicked[buttonKey] ? switchKey : ''}`}>
-            <div className="card-image">
-            <SwitchSVGComponent color={clicked[buttonKey] ? '#fff' : undefined} width='100%' height='22px' />
-            </div>
-          </div>
-        </div>
-      );
-    });
-
-    return (
-      <div className="card-row" key={key}>
-        {mainCard}
-        {smallCards}
-      </div>
-    );
-  });
-}
-
-const MusicBar = () => {
-    const cardsRef = useRef(null);
+     // In your render method, use the current array to render the cards
+  const currentTeamSVGCardCounts = currentArray === 'teamSVGCardCounts_early' ? teamSVGCardCounts_early : teamSVGCardCounts_late;
 
     //card effect
 useEffect(() => {
@@ -86,12 +150,24 @@ useEffect(() => {
   };
 }, []);
 
+
 //RETURN STATEMENT IS HERE ----------------
   return (
-        <div id='cards' ref={cardsRef}>
-          {renderCards()}
-        </div>
-  )
+    <div id='cards' ref={cardsRef}>
+      <button onClick={() => {
+        const newArray = currentArray === 'teamSVGCardCounts_early' ? 'teamSVGCardCounts_late' : 'teamSVGCardCounts_early';
+        console.log('Switching to:', newArray);
+        setCurrentArray(newArray);
+        setClicked({});
+        switchFlameColors();
+        setIsRushActive(true);
+        setTimeout(() => setIsRushActive(false), 1000);
+      }}>
+        Switch
+      </button>
+      {renderCards(currentArray === 'teamSVGCardCounts_early' ? teamSVGCardCounts_early : teamSVGCardCounts_late, clicked, handleClick, setSelectedMusic, setPlay)}
+    </div>
+  );
 }
 
 export default MusicBar

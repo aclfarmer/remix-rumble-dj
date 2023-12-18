@@ -116,15 +116,27 @@
     transition: background-color 0.3s ease-in-out;
   }
 
-  .card.small > .card-content.trebble {
+  .card.small > .card-content.early_main {
     background-color: violet;
   }
   
-  .card.small > .card-content.bass {
+  .card.small > .card-content.early_secondary {
     background-color: skyblue;
   }
   
-  .card.small > .card-content.percussion {
+  .card.small > .card-content.early_drums {
+    background-color: orange;
+  }
+
+  .card.small > .card-content.late_main {
+    background-color: violet;
+  }
+  
+  .card.small > .card-content.late_secondary {
+    background-color: skyblue;
+  }
+  
+  .card.small > .card-content.late_drums {
     background-color: orange;
   }
 

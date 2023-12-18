@@ -1,5 +1,89 @@
 import * as React from "react"
 
+export const heartsteel = ({color, ...props}) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg"
+    style={{...props.style}}
+    width={props.width || "100%"}
+    height={props.height || 16} 
+    viewBox="0 0 42.85 42.01" 
+    {...props}
+    >
+    <g data-name="Layer 2">
+      <g data-name="Layer 1">
+        <path
+          className={props.className || "dashboard-button-icon"}
+          fill="none"
+          stroke="none"
+          d="M21.2 4.11C29-1.82 35.14-1.31 40.52 5.49c3.9 4.91 2.69 18.28-2 22.25-2.8 2.38-5.56 4.79-8.35 7.17s-5.32 4.54-8.33 7.1c-3.76-3.07-9.53-4.27-8.54-11.21.13-.94-1.13-2.27-2-3.12C9.23 25.74 7 24 4.83 22.16c-6.62-5.55-6.42-12 .52-17.23C13.81-1.4 15.48-1.5 21.2 4.11Zm-1.43 28.78 2 1C25.13 31 28.32 27.74 32 25.23c4.24-2.9 5.9-6.63 5-11.45-.41-2-1.22-4.95-2.69-5.62-1.83-.83-4.84-.36-6.76.65-3.1 1.63-5.73 4.15-8.92 6.57l-.41-6.1H7.94c-1.57 4.46.09 7.11 3.41 9.65 4.44 3.4 10.33 6.18 8.42 13.96Z" 
+          />
+      </g>
+    </g>
+  </svg>
+);
+
+export const kda = ({color, ...props}) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg"
+    style={{...props.style}}
+    width={props.width || "100%"}
+    height={props.height || 16} 
+    viewBox="0 0 52.07 38.74" 
+    {...props}
+    >
+    <g data-name="Layer 2">
+      <g data-name="Layer 1">
+        <path
+          className={props.className || "dashboard-button-icon"}
+          style={{ fill: color}} 
+          d="M0 19.15v19.59h12L50.75 0H36.9L9.41 27.49v-17S-.43 18.71 0 19.15ZM28.78 29.74l7.41-7.42 15.88 15.89H36.54s-7.23-9-7.76-8.47Z" />
+      </g>
+    </g>
+  </svg>
+);
+
+export const penta = ({color, ...props}) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg"
+    style={{...props.style}}
+    width={props.width || "100%"}
+    height={props.height || 16}
+    viewBox="0 0 34.02 38.39" 
+    {...props}
+    >
+    <g data-name="Layer 2">
+      <path
+        className={props.className || "dashboard-button-icon"}
+        style={{ fill: color}} 
+        d="M34 18.31C34 10.88 24.21 8 27.4 0c-6.72 1.88-7.68 4.05-4.73 9.68 1.87 3.59.76 5.64-3.29 5.91h-4.75c-4-.27-5.16-2.32-3.28-5.91 3-5.63 2-7.8-4.74-9.68C9.8 8 .06 10.88 0 18.31c4.79.91 7.76 2.59 5.76 8.41-.57 1.67 1.69 4.92 3.45 6.64 2.13 2.1 5.1 3.35 7.79 5 2.69-1.67 5.66-2.92 7.79-5 1.75-1.72 4-5 3.44-6.64-1.98-5.82 1-7.5 5.77-8.41Zm-19.84 7h-2l-2.22-2.26v-2.94l4.24 3.53Zm9.7-2.23-2.24 2.23h-2v-1.67l4.24-3.53Z"
+        data-name="Layer 1"
+      />
+    </g>
+  </svg>
+);
+
+export const truedmg = ({color, ...props}) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg"
+    style={{...props.style}}
+    width={props.width || "100%"}
+    height={props.height || 16} 
+    viewBox="0 0 39.1 39.1" 
+    {...props}
+    >
+        <path
+          className={props.className || "dashboard-button-icon"}
+          style={{ fill: color}} 
+          d="M19.73 10.47 22.22 13 35.08.1H24.93l-5.29 5.29L14.26 0H4c.33-.33 8.8 8.56 13.07 13.09ZM19.37 28.63l-2.49-2.49L4 39h10.17l5.29-5.29 5.38 5.38h10.24c-.33.33-8.8-8.56-13.07-13.09ZM10.47 19.37 13 16.88.1 4v10.17l5.29 5.29L0 24.84v10.24c-.32-.33 8.57-8.8 13.1-13.08ZM28.63 19.73l-2.49 2.49L39 35.08V24.93l-5.29-5.29 5.38-5.38V4c.33.33-8.56 8.8-13.09 13.07Z"
+        />
+        <circle
+          className={props.className || "dashboard-button-icon"}
+          style={{ fill: color}} 
+          cx={19.64} cy={19.66} r={4.5} 
+          />
+  </svg>
+);
+
 export const eightbit = ({color, ...props}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -125,23 +209,30 @@ export const emo = ({color, ...props}) => (
   </svg>
 );
 
-export const heartsteel = ({color, ...props}) => (
+export const punk = ({color, ...props}) => (
   <svg 
     xmlns="http://www.w3.org/2000/svg"
     style={{...props.style}}
     width={props.width || "100%"}
-    height={props.height || 16} 
-    viewBox="0 0 42.85 42.01" 
+    height={props.height || 16}
+    viewBox="0 0 30.44 42.12" 
     {...props}
     >
-    <g data-name="Layer 2">
-      <g data-name="Layer 1">
+    <defs>
+      <style>{".cls-1{fill:#020202}"}</style>
+    </defs>
+    <g id="Layer_2" data-name="Layer 2">
+      <g id="Layer_1-2" data-name="Layer 1">
         <path
           className={props.className || "dashboard-button-icon"}
-          fill="none"
-          stroke="none"
-          d="M21.2 4.11C29-1.82 35.14-1.31 40.52 5.49c3.9 4.91 2.69 18.28-2 22.25-2.8 2.38-5.56 4.79-8.35 7.17s-5.32 4.54-8.33 7.1c-3.76-3.07-9.53-4.27-8.54-11.21.13-.94-1.13-2.27-2-3.12C9.23 25.74 7 24 4.83 22.16c-6.62-5.55-6.42-12 .52-17.23C13.81-1.4 15.48-1.5 21.2 4.11Zm-1.43 28.78 2 1C25.13 31 28.32 27.74 32 25.23c4.24-2.9 5.9-6.63 5-11.45-.41-2-1.22-4.95-2.69-5.62-1.83-.83-4.84-.36-6.76.65-3.1 1.63-5.73 4.15-8.92 6.57l-.41-6.1H7.94c-1.57 4.46.09 7.11 3.41 9.65 4.44 3.4 10.33 6.18 8.42 13.96Z" 
-          />
+          style={{ fill: color}} 
+          d="M23.78 3v16.77s-1.06 3.35-3.35 3.35h-2.3S16 23.83 16 25.21a2 2 0 0 0 1 1.85h4.9s5.29.12 6-7.06V1.89s.35-2-2.24-1.89-1.88 3-1.88 3ZM3 2.48v13.88s.58-2.12 3.88-2.12V1.77A1.53 1.53 0 0 0 5.07.24C3.31.36 3 2.48 3 2.48ZM9.78 8.59v5.77h4.12V7.89s-.24-2.59-2.24-1.65-1.88 2.35-1.88 2.35Z"
+        />
+        <path
+          className={props.className || "dashboard-button-icon"}
+          style={{ fill: color}} 
+          d="M16.84 14.12h4.23V8s-.82-2.11-2.23-2-2.24 2.12-2.24 2.12ZM2.72 20.83s-.12 6.94 10.12 6.7c0 0 1.06-.11.82-6.23l5.65-.24A1.6 1.6 0 0 0 20.84 19 2.56 2.56 0 0 0 19 16.59H5.66a5 5 0 0 0-2.94 4.24ZM21 37.89H9A2.22 2.22 0 0 0 7 40a2.26 2.26 0 0 0 2 2h12a2.21 2.21 0 0 0 2.31-2A2.25 2.25 0 0 0 21 37.89ZM12.43 29.11h6.12v5.84h-6.12zM8.54 29.11H2.82a2.9 2.9 0 0 0 0 5.8h5.72ZM27.75 29.16v-.05h-5.32V35h5.32a2.89 2.89 0 0 0 0-5.77Z"
+        />
       </g>
     </g>
   </svg>
@@ -210,26 +301,6 @@ export const jazz = ({color, ...props}) => (
   </svg>
 );
 
-export const kda = ({color, ...props}) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg"
-    style={{...props.style}}
-    width={props.width || "100%"}
-    height={props.height || 16} 
-    viewBox="0 0 52.07 38.74" 
-    {...props}
-    >
-    <g data-name="Layer 2">
-      <g data-name="Layer 1">
-        <path
-          className={props.className || "dashboard-button-icon"}
-          style={{ fill: color}} 
-          d="M0 19.15v19.59h12L50.75 0H36.9L9.41 27.49v-17S-.43 18.71 0 19.15ZM28.78 29.74l7.41-7.42 15.88 15.89H36.54s-7.23-9-7.76-8.47Z" />
-      </g>
-    </g>
-  </svg>
-);
-
 export const maestro = ({color, ...props}) => (
   <svg 
     xmlns="http://www.w3.org/2000/svg"
@@ -274,76 +345,5 @@ export const mix = ({color, ...props}) => (
           d="M9.42 0c1.67 2.5 4 4.8 4.86 7.55 1.25 4 4.07 3.14 6.73 3.18s5.5.66 6.64-3.36c.75-2.64 3-4.87 4.57-7.29l1.44.26a14.87 14.87 0 0 1 1.07 3.79q.15 12 0 23.94a15 15 0 0 1-.93 5.38c-1.08 2.66-2.68 4-5.7 1.71-6.21-4.71-8.18-4.65-14.52.09-3.08 2.31-4.76.7-5.55-2a30 30 0 0 1-.95-7.87c-.12-6.65-.09-13.31 0-20a33.68 33.68 0 0 1 .8-4.89ZM17 14.71c.45 3.74.64 7.06 1.34 10.27a4.26 4.26 0 0 0 2.84 2.45c.6.14 2.17-1.39 2.35-2.35.65-3.33.89-6.74 1.32-10.37Zm-6.4 7.64L14.46 29l1.54-.67-.68-8.06Zm15.2 5.93 1.73.68 3.52-6.64-4.52-2.09ZM3.91 20.75 5.07 31.3c-6.36-3.3-6.73-6.44-1.16-10.55ZM36.78 31.35c.38-3.68.73-7 1.11-10.55 5.58 3.94 5.26 7-1.11 10.55Z" />
       </g>
     </g>
-  </svg>
-);
-
-export const penta = ({color, ...props}) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg"
-    style={{...props.style}}
-    width={props.width || "100%"}
-    height={props.height || 16}
-    viewBox="0 0 34.02 38.39" 
-    {...props}
-    >
-    <g data-name="Layer 2">
-      <path
-        className={props.className || "dashboard-button-icon"}
-        style={{ fill: color}} 
-        d="M34 18.31C34 10.88 24.21 8 27.4 0c-6.72 1.88-7.68 4.05-4.73 9.68 1.87 3.59.76 5.64-3.29 5.91h-4.75c-4-.27-5.16-2.32-3.28-5.91 3-5.63 2-7.8-4.74-9.68C9.8 8 .06 10.88 0 18.31c4.79.91 7.76 2.59 5.76 8.41-.57 1.67 1.69 4.92 3.45 6.64 2.13 2.1 5.1 3.35 7.79 5 2.69-1.67 5.66-2.92 7.79-5 1.75-1.72 4-5 3.44-6.64-1.98-5.82 1-7.5 5.77-8.41Zm-19.84 7h-2l-2.22-2.26v-2.94l4.24 3.53Zm9.7-2.23-2.24 2.23h-2v-1.67l4.24-3.53Z"
-        data-name="Layer 1"
-      />
-    </g>
-  </svg>
-);
-
-export const punk = ({color, ...props}) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg"
-    style={{...props.style}}
-    width={props.width || "100%"}
-    height={props.height || 16}
-    viewBox="0 0 30.44 42.12" 
-    {...props}
-    >
-    <defs>
-      <style>{".cls-1{fill:#020202}"}</style>
-    </defs>
-    <g id="Layer_2" data-name="Layer 2">
-      <g id="Layer_1-2" data-name="Layer 1">
-        <path
-          className={props.className || "dashboard-button-icon"}
-          style={{ fill: color}} 
-          d="M23.78 3v16.77s-1.06 3.35-3.35 3.35h-2.3S16 23.83 16 25.21a2 2 0 0 0 1 1.85h4.9s5.29.12 6-7.06V1.89s.35-2-2.24-1.89-1.88 3-1.88 3ZM3 2.48v13.88s.58-2.12 3.88-2.12V1.77A1.53 1.53 0 0 0 5.07.24C3.31.36 3 2.48 3 2.48ZM9.78 8.59v5.77h4.12V7.89s-.24-2.59-2.24-1.65-1.88 2.35-1.88 2.35Z"
-        />
-        <path
-          className={props.className || "dashboard-button-icon"}
-          style={{ fill: color}} 
-          d="M16.84 14.12h4.23V8s-.82-2.11-2.23-2-2.24 2.12-2.24 2.12ZM2.72 20.83s-.12 6.94 10.12 6.7c0 0 1.06-.11.82-6.23l5.65-.24A1.6 1.6 0 0 0 20.84 19 2.56 2.56 0 0 0 19 16.59H5.66a5 5 0 0 0-2.94 4.24ZM21 37.89H9A2.22 2.22 0 0 0 7 40a2.26 2.26 0 0 0 2 2h12a2.21 2.21 0 0 0 2.31-2A2.25 2.25 0 0 0 21 37.89ZM12.43 29.11h6.12v5.84h-6.12zM8.54 29.11H2.82a2.9 2.9 0 0 0 0 5.8h5.72ZM27.75 29.16v-.05h-5.32V35h5.32a2.89 2.89 0 0 0 0-5.77Z"
-        />
-      </g>
-    </g>
-  </svg>
-);
-
-export const truedmg = ({color, ...props}) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg"
-    style={{...props.style}}
-    width={props.width || "100%"}
-    height={props.height || 16} 
-    viewBox="0 0 39.1 39.1" 
-    {...props}
-    >
-        <path
-          className={props.className || "dashboard-button-icon"}
-          style={{ fill: color}} 
-          d="M19.73 10.47 22.22 13 35.08.1H24.93l-5.29 5.29L14.26 0H4c.33-.33 8.8 8.56 13.07 13.09ZM19.37 28.63l-2.49-2.49L4 39h10.17l5.29-5.29 5.38 5.38h10.24c-.33.33-8.8-8.56-13.07-13.09ZM10.47 19.37 13 16.88.1 4v10.17l5.29 5.29L0 24.84v10.24c-.32-.33 8.57-8.8 13.1-13.08ZM28.63 19.73l-2.49 2.49L39 35.08V24.93l-5.29-5.29 5.38-5.38V4c.33.33-8.56 8.8-13.09 13.07Z"
-        />
-        <circle
-          className={props.className || "dashboard-button-icon"}
-          style={{ fill: color}} 
-          cx={19.64} cy={19.66} r={4.5} 
-          />
   </svg>
 );

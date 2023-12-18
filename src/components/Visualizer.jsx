@@ -1,13 +1,32 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+
 import './Visualizer.css';
 
 import base64Audio from '../assets/base64/cityBase64';
 
-const Visualizer = () => {
+const Visualizer = ({selectedMusic, play, setPlay}) => {
+  const audioRef = useRef(); // Create a ref for the audio element
+
+  useEffect(() => {
+    if (play && audioRef.current) {
+      audioRef.current.play();
+    } else if (!play && audioRef.current) {
+      audioRef.current.pause();
+    }
+  }, [play]);
 
   useEffect(() => {
     const audio1 = document.getElementById('audio1');
-    audio1.src = base64Audio;
+
+    if (!audio1.paused) {
+      audio1.onended = () => {
+        audio1.src = selectedMusic || base64Audio;
+        audio1.onended = null;
+      };
+    } else {
+      audio1.src = selectedMusic || base64Audio;
+    }
+
     const audioContext = new AudioContext();
 
     const container = document.getElementById('canvas-container');
@@ -19,30 +38,31 @@ const Visualizer = () => {
     ctx.globalCompositeOperation = 'difference';
     let audioSource;
     let analyser;
-
-    container.addEventListener('click', function() {    
-        audioSource = audioContext.createMediaElementSource(audio1);
-        analyser = audioContext.createAnalyser();
-        audioSource.connect(analyser);
-        analyser.connect(audioContext.destination);
-        //increase or decrease the below line for more or less visualizer bars. Must be a multitude of 32
-        analyser.fftSize = 128;
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-        //bar settings
-        const barWidth = 5;
-        let barHeight;
-        let x;
+  
+    audioSource = audioContext.createMediaElementSource(audio1);
+    analyser = audioContext.createAnalyser();
+    audioSource.connect(analyser);
+    analyser.connect(audioContext.destination);
+    //increase or decrease the below line for more or less visualizer bars. Must be a multitude of 32
+    analyser.fftSize = 128;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    //bar settings
+    const barWidth = 5;
+    let barHeight;
+    let x;
     
-        function animate() {
-          x = 0;
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          analyser.getByteFrequencyData(dataArray);
-          drawVisualizer(bufferLength, x, barWidth, barHeight, dataArray);
-          requestAnimationFrame(animate);
-        }
-        animate();
-    });
+    let rotation = 0;
+    function animate() {
+      x = 0;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      analyser.getByteFrequencyData(dataArray);
+      drawVisualizer(bufferLength, x, barWidth, barHeight, dataArray);
+      rotation += 0.001;
+      requestAnimationFrame(animate);
+    }
+    
+    animate();
 
 
     //visualizer section. Everything here to do with the visualizer, including design.
@@ -57,29 +77,65 @@ const Visualizer = () => {
       ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
       ctx.strokeStyle = '#69c4a7';
       ctx.stroke();
+  
+
 
       for (let i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i] * 0.8;
-      
-        // calculate the angle for this bar
-        const angle = (i / bufferLength) * 2.4 * Math.PI;
-      
-        // calculate the start and end points of the bar
-        const startX = centerX + radius * Math.cos(angle);
-        const startY = centerY + radius * Math.sin(angle);
-        const endX = centerX + (radius + barHeight) * Math.cos(angle);
-        const endY = centerY + (radius + barHeight) * Math.sin(angle);
+        barHeight = dataArray[i] * 0.4;
+        let minBarHeight = 10;
 
+        if (barHeight < minBarHeight) {
+          barHeight = minBarHeight;
+        }
+
+        let angle;
+        if (i > bufferLength * 0.5) {
+          // For bars inside the circle, reverse the direction and center it
+          angle = ((bufferLength - i) / bufferLength - 0.0) * Math.PI;
+        } else {
+          // For bars outside the circle
+          angle = (i / bufferLength) * Math.PI;
+        }
+
+        // Save the current context
+        ctx.save();
+
+        // Move to the center of the canvas
+        ctx.translate(centerX, centerY);
+
+        // Rotate the canvas
+        ctx.rotate(rotation);
+
+        // Move back to the top left corner
+        ctx.translate(-centerX, -centerY);
+      
+          // calculate the start and end points of the bar
+          const startX = centerX + radius * Math.cos(angle);
+          const startY = centerY + radius * Math.sin(angle);
+          let endX, endY;
+
+          if (i > bufferLength * 0.5) {
+            // For bars inside the circle
+            endX = centerX + (radius - barHeight) * Math.cos(angle);
+            endY = centerY + (radius - barHeight) * Math.sin(angle);
+          } else {
+            // For bars outside the circle
+            endX = centerX + (radius + barHeight) * Math.cos(angle);
+            endY = centerY + (radius + barHeight) * Math.sin(angle);
+          }
+          minBarHeight = 0;
         // draw the bar
         ctx.beginPath();
         ctx.moveTo(startX, startY);
         ctx.lineTo(endX, endY);
+        
         ctx.lineWidth = barWidth;
         ctx.strokeStyle = 'white';
         ctx.stroke();
 
         if (i > bufferLength * 0.8) {
           ctx.beginPath();
+          ctx.lineWidth = 0.8;
           ctx.arc(centerX, centerY, barHeight, 0, Math.PI * 2)
           ctx.stroke();
         }
@@ -90,7 +146,7 @@ const Visualizer = () => {
     //center circle
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-    ctx.lineWidth = 2;
+    ctx.minBarHeight = 1;
     ctx.strokeStyle = '#69c4a7';
     ctx.stroke();
 
@@ -122,15 +178,14 @@ const Visualizer = () => {
 
     // Reset the globalCompositeOperation to 'source-over' (the default value)
     ctx.globalCompositeOperation = 'source-over';
-
   }
-  }, []);
+  }, [selectedMusic]);
 
 return (
     <div className='visualizer-container'>
       <div id='canvas-container'>
         <canvas id='canvas1'></canvas>
-          <audio id="audio1" controls="controls" src={base64Audio} ></audio>
+          <audio id="audio1" ref={audioRef} controls="controls" src={selectedMusic} ></audio>
       </div>
     </div>
   );

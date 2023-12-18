@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import './App.css'
 
+import FlameColorContext from './components/FlameColorContext';
 
+import Flames from './components/Flames';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 
@@ -18,10 +20,25 @@ function App() {
     }, { duration: 3000, fill: "forwards"});
   };
 
+  const [flameColors, setFlameColors] = useState(['orange', 'red', 'gold']);
+  const [isRushActive, setIsRushActive] = useState(false);
+  
+  const switchFlameColors = () => {
+    if (flameColors[0] === 'orange') {
+      setFlameColors(['#2eb9ff', 'violet', '#2eff77']);
+    } else {
+      setFlameColors(['orange', 'red', 'gold']);
+    }
+    setIsRushActive(true);
+    setTimeout(() => setIsRushActive(false), 1000)
+  };
+
   return (
-    <div id="_root" onMouseMove={handleMouseMove}>
+    <FlameColorContext.Provider value={{ flameColors, switchFlameColors }}>
+    <div id="_root" onMouseMove={handleMouseMove} className={isRushActive ? 'rush' : ''}>
       <div id="blob-container">
       <div id="blob" />
+      <Flames />
       </div>
       <div id="blur">
         <div className='root-container'>
@@ -36,10 +53,11 @@ function App() {
                   <Navbar />
                   <Dashboard/> 
                 </motion.div>
-            </AnimatePresence>
+          </AnimatePresence>
         </div>
       </div>
     </div>
+  </FlameColorContext.Provider>
   )
 };
 
