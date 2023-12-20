@@ -45,7 +45,7 @@ import FlameColorContext from './FlameColorContext';
 
     const teamOrder = ['heartsteel', 'kda', 'penta', 'truedmg', 'eightbit', 'country', 'disco', 'edm', 'emo', 'punk', 'hyper', 'illbeats', 'jazz', 'maestro', 'mix'];
 
-    function renderCards(currentArray, clicked, handleClick, setSelectedMusic, setPlay) {
+    function renderCards(currentArray, clicked, handleClick, selectedMusics, setSelectedMusics, setPlay) {
       return teamOrder.map(key => {
         const TeamSVGComponent = teamSVGList[key];
     
@@ -79,12 +79,15 @@ import FlameColorContext from './FlameColorContext';
             <div className='card small' key={buttonKey} onClick={() =>{ 
               handleClick(buttonKey);
               if (clicked[buttonKey]) {
-                setSelectedMusic(null); // or setSelectedMusic(undefined);
+                setSelectedMusics(selectedMusics.filter(music => music !== MusicList[buttonKey]));
                 setPlay(false);
               } else {
-                setSelectedMusic(MusicList[buttonKey]);
+                if (selectedMusics.length === 4) {
+                  setSelectedMusics([...selectedMusics.slice(1), MusicList[buttonKey]]);
+                } else {
+                  setSelectedMusics([...selectedMusics, MusicList[buttonKey]]);
+                }
                 setPlay(true);
-                console.log('Selected Music:', MusicList[buttonKey]);
               }
             }}>
               <div className='card-border'/>
@@ -106,7 +109,7 @@ import FlameColorContext from './FlameColorContext';
       });
     }
 
-const MusicBar = ({setSelectedMusic, setPlay}) => {
+const MusicBar = ({setSelectedMusics, selectedMusics, setPlay}) => {
     const cardsRef = useRef(null);
     const [currentArray, setCurrentArray] = useState('teamSVGCardCounts_early');
     const [clicked, setClicked] = useState(false);
@@ -123,7 +126,7 @@ const MusicBar = ({setSelectedMusic, setPlay}) => {
      // In your render method, use the current array to render the cards
   const currentTeamSVGCardCounts = currentArray === 'teamSVGCardCounts_early' ? teamSVGCardCounts_early : teamSVGCardCounts_late;
 
-    //card effect
+    //card effect-----------------------------------
 useEffect(() => {
   const handleMouseMove = (e) => {
     const cards = cardsRef.current.querySelectorAll('.card, .card.small');
@@ -162,10 +165,12 @@ useEffect(() => {
         switchFlameColors();
         setIsRushActive(true);
         setTimeout(() => setIsRushActive(false), 1000);
+        setSelectedMusics([]);
+        setPlay(false);
       }}>
         Switch
       </button>
-      {renderCards(currentArray === 'teamSVGCardCounts_early' ? teamSVGCardCounts_early : teamSVGCardCounts_late, clicked, handleClick, setSelectedMusic, setPlay)}
+      {renderCards(currentArray === 'teamSVGCardCounts_early' ? teamSVGCardCounts_early : teamSVGCardCounts_late, clicked, handleClick, selectedMusics, setSelectedMusics, setPlay)}
     </div>
   );
 }
