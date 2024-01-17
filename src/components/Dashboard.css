@@ -3,7 +3,7 @@
   }
 
 .dashboard-container {
-  padding-top: 15px;
+  padding-top: 25px;
   display: flex;
   flex-direction: row;
 }
@@ -33,10 +33,6 @@
     max-height: 660px;
     width: calc(100% - 20px);
   }
-
-  #cards:hover .card::after {
-    opacity: 1;
-  }
   
   .card {
     background-color: rgba(255, 255, 255, 0.1);
@@ -47,6 +43,19 @@
     flex-direction: column;
     position: relative;
     width: 75px;  
+  }
+
+  .big {
+    cursor:default !important;
+  }
+
+  .big:hover .card-image svg path {
+    fill: #3e3e3e !important;
+  }
+
+  
+  .big:hover .card-image svg circle {
+    fill: #3e3e3e !important;
   }
   
   .small {

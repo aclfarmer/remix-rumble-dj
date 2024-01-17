@@ -1,14 +1,35 @@
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+
+import { SwitchContext } from './context';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import './App.css'
 
-import FlameColorContext from './components/FlameColorContext';
 
-import Flames from './components/Flames';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
+import Footer from './components/Footer';
 
 function App() {
+  const [switchTriggered, setSwitchTriggered] = useState(false);
+  const [selectedMusics, setSelectedMusics] = useState([]);
+  const [musicButtonId, setMusicButtonId] = useState([]);
+  
+
+  useEffect(() => {
+    // Parse the query parameters from the URL
+    const params = new URLSearchParams(window.location.search);
+
+    // Get the 'music' parameters
+    const musics = params.getAll('music');
+
+    if (musics.length > 0) {
+      // Set the 'selectedMusics' state
+      setMusicButtonId(musics);
+    }
+  }, []);
+
   //blob tracker
   const handleMouseMove = (event) => {
     const blob = document.getElementById('blob');
@@ -20,26 +41,14 @@ function App() {
     }, { duration: 3000, fill: "forwards"});
   };
 
-  const [flameColors, setFlameColors] = useState(['orange', 'red', 'gold']);
-  const [isRushActive, setIsRushActive] = useState(false);
-  
-  const switchFlameColors = () => {
-    if (flameColors[0] === 'orange') {
-      setFlameColors(['#2eb9ff', 'violet', '#2eff77']);
-    } else {
-      setFlameColors(['orange', 'red', 'gold']);
-    }
-    setIsRushActive(true);
-    setTimeout(() => setIsRushActive(false), 1000)
-  };
 
   return (
-    <FlameColorContext.Provider value={{ flameColors, switchFlameColors }}>
-    <div id="_root" onMouseMove={handleMouseMove} className={isRushActive ? 'rush' : ''}>
+    <Router>
+    <SwitchContext.Provider value={{ switchTriggered, setSwitchTriggered }}>
+    <div id="_root" onMouseMove={handleMouseMove}>
       <div id="blob-container">
       <div id="blob" />
-      <Flames />
-      </div>
+      <div className={`gradient-overlay ${switchTriggered ? 'late' : 'early'}`} />
       <div id="blur">
         <div className='root-container'>
           <AnimatePresence mode='wait'>
@@ -50,15 +59,25 @@ function App() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <Navbar />
-                  <Dashboard/> 
+                  <Navbar musicButtonId={musicButtonId} />
+                  <Dashboard 
+                    selectedMusics={selectedMusics} 
+                    setSelectedMusics={setSelectedMusics}
+                    musicButtonId={musicButtonId}
+                    setMusicButtonId={setMusicButtonId}
+                  />
+                  {console.log(selectedMusics)}
+                  {console.log(musicButtonId)}
+                  <Footer />
                 </motion.div>
           </AnimatePresence>
         </div>
       </div>
+      </div>
     </div>
-  </FlameColorContext.Provider>
-  )
+    </SwitchContext.Provider>
+    </Router>
+  );
 };
 
 export default App

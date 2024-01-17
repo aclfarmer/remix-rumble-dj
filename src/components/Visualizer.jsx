@@ -18,8 +18,6 @@ function drawVisualizer(canvas, ctx, rotation, bufferLength, barWidth, dataArray
   ctx.strokeStyle = '#69c4a7';
   ctx.stroke();
 
-
-
   for (let i = 0; i < bufferLength; i++) {
     barHeight = dataArray[i] * 0.4;
     let minBarHeight = 10;
@@ -122,11 +120,99 @@ function drawVisualizer(canvas, ctx, rotation, bufferLength, barWidth, dataArray
 }
 
 
-const Visualizer = ({selectedMusics, play, setPlay}) => {
+const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setCurrentTime, musicButtonId }) => {
   const audioRef = useRef([]); // Create a ref for the audio element
-  const canvasRef = useRef(null);
+  const canvasRef = useRef(null); //ref for canvas
+  const rotation = useRef(0); //holds rotation of visualizer
 
-  const rotation = useRef(0);
+  const [showPlayButton, setShowPlayButton] = useState(false); 
+  const [isPaused, setIsPaused] = useState(false);
+
+  const startHasRun = useRef(false);
+  
+  useEffect(() => {
+    // New useEffect hook that runs on load and whenever musicButtonId changes
+    if (!startHasRun.current && musicButtonId.length > 0) {
+      audioRef.current.forEach(audio => audio.pause());
+      setShowPlayButton(true);
+      startHasRun.current = true;
+      setCurrentTime(0);
+    } else {
+      setShowPlayButton(false);
+    }
+  }, [musicButtonId]);
+
+  const handlePlayButtonClick = () => {
+    audioRef.current.forEach(audio => audio.play());
+    setShowPlayButton(false);
+  };
+
+  const handleCanvasClick = () => {
+    if (play) {
+      audioRef.current.forEach(audio => audio.pause());
+    } else {
+      audioRef.current.forEach(audio => audio.play());
+    }
+    setPlay(!play);
+  };
+
+
+// Declare startTime outside of the useEffect hook
+const startTime = useRef(null);
+const intervalId = useRef(null);
+
+useEffect(() => {
+  if (selectedMusics.length > 0) {
+    // Start the timer only if selectedMusics is not empty and the audio is not paused
+    if (!isPaused && startTime.current === null) {
+      // Set startTime only if it's not set yet
+      startTime.current = Date.now();
+    }
+    intervalId.current = setInterval(() => {
+      if (!isPaused) {
+        const newTime = (Date.now() - startTime.current) / 1000;
+        if (newTime >= timeValue) {
+          // Stop the timer when it reaches timeValue
+          clearInterval(intervalId.current);
+          startTime.current = null;
+        } else {
+          setCurrentTime(newTime);
+        }
+      }
+    }, 50);
+  } else {
+    // Reset the timer and startTime if selectedMusics is empty
+    setCurrentTime(0);
+    startTime.current = null;
+    clearInterval(intervalId.current);
+  }
+}, [selectedMusics, timeValue, isPaused]); // Add isPaused to the dependency array
+
+useEffect(() => {
+  if (play) {
+    startTime.current = Date.now() - currentTime * 1000;
+    intervalId.current = setInterval(() => {
+      const newTime = (Date.now() - startTime.current) / 1000;
+      if (newTime >= timeValue) {
+        clearInterval(intervalId.current);
+        startTime.current = null;
+      } else {
+        setCurrentTime(newTime);
+      }
+    }, 50);
+  } else {
+    clearInterval(intervalId.current);
+  }
+}, [play, timeValue, currentTime]);
+
+// Add a useEffect hook to pause and play the audio
+useEffect(() => {
+  if (isPaused) {
+    audioRef.current.forEach(audio => audio.pause());
+  } else {
+    audioRef.current.forEach(audio => audio.play());
+  }
+}, [isPaused]);
 
   useEffect(() => {
     const audioContexts = [];   // Create an array to hold the audio contexts
@@ -135,6 +221,10 @@ const Visualizer = ({selectedMusics, play, setPlay}) => {
     const analysers = [];   // Create an array to hold the analysers
     const dataArray = [];   // Create an array to hold the data arrays
     const bufferLength = [];  // Create an array to hold the buffer lengths
+
+    let animationFrameId;  // Create a variable to hold the animation frame id
+
+
 
     if (canvasRef.current) {
       const canvas = canvasRef.current;
@@ -152,68 +242,99 @@ const Visualizer = ({selectedMusics, play, setPlay}) => {
       bufferLength[0] = 64;
       dataArray[0] = new Uint8Array(bufferLength[0]).fill(10);
 
+
       function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Calculate the rotation increment for each part
+        const rotationIncrement = 2 * Math.PI / 4;  // Divide the circle into 4 parts
       
-        if (selectedMusics.length === 0) {
-          // Draw the visualizer with the default values when no music is selected
-          drawVisualizer(canvas, ctx, rotation.current, bufferLength[0], barWidth, dataArray[0]);
-        } else {
-          selectedMusics.forEach((music, index) => {
-            // Check if the analyser and data array at the given index are defined
-            if (analysers[index] && dataArray[index]) {
-              // Get the frequency data
-              analysers[index].getByteFrequencyData(dataArray[index]);
-            }
-    
-            // Draw the visualizer
-            drawVisualizer(canvas, ctx, rotation.current, bufferLength[index], barWidth, dataArray[index]);
-          });
+        for (let i = 0; i < 4; i++) {
+          // Check if the number of selected musics is greater than the part's index
+          if (i < selectedMusics.length && analysers[i] && dataArray[i]) {
+            // Get the frequency data
+            analysers[i].getByteFrequencyData(dataArray[i]);
+        
+            // Calculate the rotation for this part
+            const partRotation = rotation.current + rotationIncrement * i;
+        
+            // Draw the visualizer for this music
+            drawVisualizer(canvas, ctx, partRotation, bufferLength[i], barWidth, dataArray[i]);
+          } else {
+            // No music is selected for this part, draw the visualizer with the default values
+            const partRotation = rotation.current + rotationIncrement * i;
+            drawVisualizer(canvas, ctx, partRotation, bufferLength[0], barWidth, dataArray[0]);
+          }
         }
+  
     
         // Increment the rotation and request the next animation frame
         rotation.current += 0.001;
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
       } //END ANIMATE() FUNCTION
 
       // Start the animation
       animate();
-          
+      if (selectedMusics.length > 0) {  
           selectedMusics.forEach((music, index) => {
-            //audio loop
-              // Create a new audio element for each music
+            if (audios[index]) {
+              // Update the src and currentTime of the existing Audio object
+              audios[index].src = music || undefined;
+              audios[index].currentTime = currentTime;
+            } else {
+              // Create a new Audio object
               audios[index] = new Audio();
               audios[index].src = music || undefined;
-            
+              audios[index].currentTime = currentTime;
+          
               // Create a new audio context for each music
               audioContexts[index] = new AudioContext();
-            
+          
               // Create a new audio source for each music
               audioSources[index] = audioContexts[index].createMediaElementSource(audios[index]);
-            
+          
               // Create a new analyser for each music
               analysers[index] = audioContexts[index].createAnalyser();
-            
+          
               // Connect the audio source to the analyser and the analyser to the destination
               audioSources[index].connect(analysers[index]);
               analysers[index].connect(audioContexts[index].destination);
-            
+          
               // Set the fftSize and get the frequency data
               analysers[index].fftSize = 128;
               bufferLength[index] = analysers[index].frequencyBinCount;
               dataArray[index] = new Uint8Array(bufferLength[index]);
-            //audio loop end
-              audios[index].play();
+            }
+
+            audios[index].addEventListener('canplaythrough', function() {
+              // The audio is now playable, call the play method
+              this.play();
+            }, false);
           });
         }
-}, [selectedMusics, play, rotation]);
-
+     }
+     return () => {
+      // Stop the audio playback and remove the audio elements
+      audios.forEach((audio, index) => {
+        audio.pause();
+        audio.src = '';
+        audios[index] = null;
+      });
+  
+      // Cancel the animation frame
+      cancelAnimationFrame(animationFrameId);
+    };
+        }, [selectedMusics, play, rotation]);
 
 return (
     <div className='visualizer-container'>
-      <div id='canvas-container'>
+      <div id='canvas-container' onClick={handleCanvasClick}>
         <canvas ref={canvasRef} id='canvas1'></canvas>
-          <audio id="audio1" ref={audioRef} controls="controls" src={selectedMusics} ></audio>
+        {showPlayButton && (
+          <div className='play-button-overlay' onClick={handlePlayButtonClick}>
+            <button className='play-button'>Play</button>
+          </div>
+        )}
       </div>
     </div>
   );

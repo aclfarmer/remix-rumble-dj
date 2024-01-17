@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 const flickerAnimation = {
-  hidden: { opacity: 0.3 },
+  hidden: { opacity: 1 },
   visible: { 
-    opacity: 1,
+    opacity: 0.3,
     transition: {
       duration: 0.05,
       yoyo: Infinity,
@@ -23,7 +23,7 @@ const RRLogo = ({style}) => {
       setTimeout(toggleFlickering, nextToggle);
     };
   
-    const initialDelay = setTimeout(toggleFlickering, 2000);
+    const initialDelay = setTimeout(toggleFlickering, 10000);
   
     return () => {
       clearTimeout(initialDelay);

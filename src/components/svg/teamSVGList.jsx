@@ -13,8 +13,7 @@ export const heartsteel = ({color, ...props}) => (
       <g data-name="Layer 1">
         <path
           className={props.className || "dashboard-button-icon"}
-          fill="none"
-          stroke="none"
+          style={{ fill: color}} 
           d="M21.2 4.11C29-1.82 35.14-1.31 40.52 5.49c3.9 4.91 2.69 18.28-2 22.25-2.8 2.38-5.56 4.79-8.35 7.17s-5.32 4.54-8.33 7.1c-3.76-3.07-9.53-4.27-8.54-11.21.13-.94-1.13-2.27-2-3.12C9.23 25.74 7 24 4.83 22.16c-6.62-5.55-6.42-12 .52-17.23C13.81-1.4 15.48-1.5 21.2 4.11Zm-1.43 28.78 2 1C25.13 31 28.32 27.74 32 25.23c4.24-2.9 5.9-6.63 5-11.45-.41-2-1.22-4.95-2.69-5.62-1.83-.83-4.84-.36-6.76.65-3.1 1.63-5.73 4.15-8.92 6.57l-.41-6.1H7.94c-1.57 4.46.09 7.11 3.41 9.65 4.44 3.4 10.33 6.18 8.42 13.96Z" 
           />
       </g>
@@ -42,7 +41,7 @@ export const kda = ({color, ...props}) => (
   </svg>
 );
 
-export const penta = ({color, ...props}) => (
+export const pentakill = ({color, ...props}) => (
   <svg 
     xmlns="http://www.w3.org/2000/svg"
     style={{...props.style}}
@@ -325,7 +324,7 @@ export const maestro = ({color, ...props}) => (
   </svg>
 );
 
-export const mix = ({color, ...props}) => (
+export const mixmaster = ({color, ...props}) => (
   <svg 
     xmlns="http://www.w3.org/2000/svg"
     style={{...props.style}}
