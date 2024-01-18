@@ -132,7 +132,7 @@ const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setC
   
   useEffect(() => {
     // New useEffect hook that runs on load and whenever musicButtonId changes
-    if (!startHasRun.current && musicButtonId.length > 0) {
+    if (!startHasRun.current && musicButtonId.length > 0 && selectedMusics.length == 0) {
       audioRef.current.forEach(audio => audio.pause());
       setShowPlayButton(true);
       startHasRun.current = true;
