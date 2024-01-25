@@ -122,13 +122,13 @@ function renderCards(
               setPlay(false);
             } else {
               if (selectedMusics.length === 5) {
-                const firstMusicKey = Object.keys(MusicList).find(
-                  (key) => MusicList[key] === selectedMusics[0]
-                );
+                const firstMusicKey = musicButtonId[0];
                 setSelectedMusics([...selectedMusics.slice(1), MusicList[buttonKey]]);
+                setMusicButtonId([...musicButtonId.slice(1), buttonKey]);
                 setClicked((prevState) => ({ ...prevState, [firstMusicKey]: false }));
               } else {
                 setSelectedMusics([...selectedMusics, MusicList[buttonKey]]);
+                setMusicButtonId([...musicButtonId, buttonKey]);
               }
               setPlay(true);
             }
@@ -157,15 +157,17 @@ function renderCards(
   });
 }
 
-const MusicBar = ({ setSelectedMusics, selectedMusics, setPlay, setTimeValue, switchTriggered, resetSwitch, musicButtonId, setMusicButtonId }) => {
+const MusicBar = ({ setSelectedMusics, selectedMusics, setPlay, setTimeValue, switchTriggered, musicButtonId, setMusicButtonId }) => {
   const cardsRef = useRef(null);
-  const [currentArray, setCurrentArray] = useState('teamSVGCardCounts_early');
+  const [currentArray, setCurrentArray] = useState(
+    switchTriggered ? teamSVGCardCounts_late : teamSVGCardCounts_early
+  );
   const [clicked, setClicked] = useState(false);
 
   useEffect(() => {
-    if (currentArray === 'teamSVGCardCounts_early') {
+    if (currentArray === teamSVGCardCounts_early) {
       setTimeValue(3 * 60 + 30); // 3 minutes 30 seconds in seconds
-    } else if (currentArray === 'teamSVGCardCounts_late') {
+    } else if (currentArray === teamSVGCardCounts_late) {
       setTimeValue(2 * 60 + 53); // 2 minutes 53 seconds in seconds
     }
   }, [currentArray, setTimeValue]);
@@ -198,8 +200,6 @@ const MusicBar = ({ setSelectedMusics, selectedMusics, setPlay, setTimeValue, sw
     }
   }, [musicButtonId]);
 
-  const currentTeamSVGCardCounts = currentArray === 'teamSVGCardCounts_early' ? teamSVGCardCounts_early : teamSVGCardCounts_late;
-
   useEffect(() => {
     const handleMouseMove = (e) => {
       const cards = cardsRef.current.querySelectorAll('.card, .card.small');
@@ -224,24 +224,20 @@ const MusicBar = ({ setSelectedMusics, selectedMusics, setPlay, setTimeValue, sw
       }
     };
   }, []);
+  
 
   useEffect(() => {
-    if (switchTriggered) {
-      const newArray = currentArray === 'teamSVGCardCounts_late' ? 'teamSVGCardCounts_early' : 'teamSVGCardCounts_late';
-      console.log('Switching to:', newArray);
-      setCurrentArray(newArray);
-      setClicked({});
-      setSelectedMusics([]);
-      setMusicButtonId([]);
-      setPlay(false);
-      resetSwitch();
-    }
+    setCurrentArray(switchTriggered ? teamSVGCardCounts_late : teamSVGCardCounts_early);
+    setClicked({});
+    setSelectedMusics([]);
+    setMusicButtonId([]);
+    setPlay(false);
   }, [switchTriggered]);
 
   return (
     <div id='cards' ref={cardsRef}>
       {renderCards(
-        currentTeamSVGCardCounts,
+        currentArray,
         clicked,
         handleClick,
         selectedMusics,

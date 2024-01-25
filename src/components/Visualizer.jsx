@@ -143,19 +143,27 @@ const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setC
   }, [musicButtonId]);
 
   const handlePlayButtonClick = () => {
-    audioRef.current.forEach(audio => audio.play());
     setShowPlayButton(false);
-  };
+   };
 
-  const handleCanvasClick = () => {
-    if (play) {
-      audioRef.current.forEach(audio => audio.pause());
+   const handleCanvasClick = () => {
+    console.log('play state:' + play)
+    const newPlayState = !play;
+    if (newPlayState) {
+      audioRef.current.forEach(audio => {
+        if (audio.paused) {
+          audio.play();
+        }
+      });
     } else {
-      audioRef.current.forEach(audio => audio.play());
+      audioRef.current.forEach(audio => {
+        if (!audio.paused) {
+          audio.pause();
+        }
+      });
     }
-    setPlay(!play);
+    setPlay(newPlayState);
   };
-
 
 // Declare startTime outside of the useEffect hook
 const startTime = useRef(null);
@@ -206,6 +214,8 @@ useEffect(() => {
 }, [play, timeValue, currentTime]);
 
 // Add a useEffect hook to pause and play the audio
+
+/*
 useEffect(() => {
   if (isPaused) {
     audioRef.current.forEach(audio => audio.pause());
@@ -213,6 +223,7 @@ useEffect(() => {
     audioRef.current.forEach(audio => audio.play());
   }
 }, [isPaused]);
+*/
 
   useEffect(() => {
     const audioContexts = [];   // Create an array to hold the audio contexts
@@ -331,8 +342,8 @@ return (
       <div id='canvas-container' onClick={handleCanvasClick}>
         <canvas ref={canvasRef} id='canvas1'></canvas>
         {showPlayButton && (
-          <div className='play-button-overlay' onClick={handlePlayButtonClick}>
-            <button className='play-button'>Play</button>
+          <div className='play-button-overlay'>
+            <button className='play-button' onClick={handlePlayButtonClick}>Play</button>
           </div>
         )}
       </div>

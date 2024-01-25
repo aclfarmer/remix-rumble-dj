@@ -6,7 +6,7 @@ import MusicBar from './MusicBar';
 import Visualizer from './Visualizer';
 import InformationBar from './InformationBar';
 
-const Dashboard = ({ selectedMusics, setSelectedMusics, musicButtonId, setMusicButtonId }) => {
+const Dashboard = ({ selectedMusics, setSelectedMusics, musicButtonId, setMusicButtonId, switchTriggered, setSwitchTriggered }) => {
   //passed over to Visauliser
   const [play, setPlay] = useState(false);
   //play time values passed to Visauliser
@@ -14,14 +14,10 @@ const Dashboard = ({ selectedMusics, setSelectedMusics, musicButtonId, setMusicB
   //current time of song passed to informationBar
   const [currentTime, setCurrentTime] = useState(0);
   //Early-Late game switch trigger (chnages songs and timer) passed up from InformationBar
-  const [switchTriggered, setSwitchTriggered] = useState(false);
+
 
   const handleSwitch = () => {
     setSwitchTriggered(true);
-  };
-
-  const resetSwitch = () => {
-    setSwitchTriggered(false);
   };
     
   return (
@@ -33,7 +29,6 @@ const Dashboard = ({ selectedMusics, setSelectedMusics, musicButtonId, setMusicB
           setPlay={setPlay} 
           setTimeValue={setTimeValue}
           switchTriggered={switchTriggered}
-          resetSwitch={resetSwitch} 
           musicButtonId={musicButtonId}
           setMusicButtonId={setMusicButtonId}
           />

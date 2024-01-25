@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import { SwitchContext } from '../context';
 import './InformationBar.css'
 
@@ -7,25 +7,30 @@ const InformationBar = ({ handleSwitch, currentTime, selectedMusics, timeValue})
   const [text, setText] = useState('Early');
   const { switchTriggered, setSwitchTriggered } = useContext(SwitchContext);
 
+  useEffect(() => { 
+    setTimeout(() => {
+      setText(switchTriggered ? 'Late' : 'Early');
+    }, 150);
+  } , [switchTriggered]);
+
   const handleClick = () => {
     setClicked(!clicked);
     handleSwitch();
-    setSwitchTriggered(!switchTriggered);
-  
-    setTimeout(() => {
-      setText(!clicked ? 'Late' : 'Early');
-    }, 150);
   }
 
+  const handleSwitchTriggeredChange = () => {
+    setSwitchTriggered(!switchTriggered);
+  };
+
   return (
-    <div className={`informationBar_container ${clicked ? 'late' : 'early'}`}>
+    <div className={`informationBar_container ${switchTriggered ? 'late' : 'early'}`}>
       <div className='informationBar'>
         <div className='informationBar_switch'>
           <span style={{fontWeight: 'bold'}}>Game: </span>
           <label className="switch-button">
-          <input type="checkbox" onClick={handleClick} />
-            <span className={`switch-button-slider round ${!clicked ? 'switch-button-slider-late' : ''}`}>
-              <span className={`switch-button-slider-text ${clicked ? 'left' : 'right'}`}>
+          <input type="checkbox" checked={switchTriggered} onChange={handleSwitchTriggeredChange} onClick={handleClick} />
+            <span className={`switch-button-slider round ${!switchTriggered ? 'switch-button-slider-late' : ''}`}>
+              <span className={`switch-button-slider-text ${switchTriggered ? 'left' : 'right'}`}>
                 {text}
               </span>
             </span>

@@ -11,12 +11,27 @@ import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import Footer from './components/Footer';
 
+
+function getInitialSwitchState() {
+  // Parse the query parameters from the URL
+  const params = new URLSearchParams(window.location.search);
+
+  // Get the 'music' parameters
+  const musics = params.getAll('music');
+
+  // Check if the first music parameter includes 'late'
+  if (musics.length > 0 && musics[0].includes('late')) {
+    return true;
+  }
+
+  return false;
+}
+
 function App() {
-  const [switchTriggered, setSwitchTriggered] = useState(false);
+  const [switchTriggered, setSwitchTriggered] = useState(getInitialSwitchState());
   const [selectedMusics, setSelectedMusics] = useState([]);
   const [musicButtonId, setMusicButtonId] = useState([]);
   
-
   useEffect(() => {
     // Parse the query parameters from the URL
     const params = new URLSearchParams(window.location.search);
@@ -25,10 +40,15 @@ function App() {
     const musics = params.getAll('music');
 
     if (musics.length > 0) {
-      // Set the 'selectedMusics' state
-      setMusicButtonId(musics);
+
+        setMusicButtonId(musics);
+
     }
   }, []);
+
+  useEffect(() => {
+    console.log('switch state:'+ switchTriggered);
+  }, [switchTriggered]);
 
   //blob tracker
   const handleMouseMove = (event) => {
@@ -65,9 +85,9 @@ function App() {
                     setSelectedMusics={setSelectedMusics}
                     musicButtonId={musicButtonId}
                     setMusicButtonId={setMusicButtonId}
+                    switchTriggered={switchTriggered}
+                    setSwitchTriggered={setSwitchTriggered}
                   />
-                  {console.log(selectedMusics)}
-                  {console.log(musicButtonId)}
                   <Footer />
                 </motion.div>
           </AnimatePresence>
