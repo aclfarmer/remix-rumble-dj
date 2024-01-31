@@ -147,26 +147,9 @@ const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setC
    };
 
    const handleCanvasClick = () => {
-    /*
-    if (play) {
-      audioRef.current.forEach(audio => {
-        if (!audio.paused) {
-          audio.pause();
-          console.log('AUDIO PAUSED)')
-        }
-      });
-    } else {
-      audioRef.current.forEach(audio => {
-        if (audio.paused) {
-          audio.play();
-          console.log('AUDIO PLAYING)')
-        }
-      });
-    }
-    */
-    //THIS RIGHT HERE vvv IS THE PROBLEM
     setPlay(!play);
-    console.log(setPlay)
+    //setIsPaused(isPaused);   
+    console.log(play)
   };
 
 // Declare startTime outside of the useEffect hook
@@ -198,13 +181,15 @@ useEffect(() => {
     startTime.current = null;
     clearInterval(intervalId.current);
   }
-}, [selectedMusics, timeValue, isPaused]); // Add isPaused to the dependency array
+}, [selectedMusics, timeValue, isPaused]); 
 
+
+//this is where i need to edit for the pause
 useEffect(() => {
   if (play) {
     startTime.current = Date.now() - currentTime * 1000;
     intervalId.current = setInterval(() => {
-      const newTime = (Date.now() - startTime.current) / 1000;
+    const newTime = (Date.now() - startTime.current) / 1000;
       if (newTime >= timeValue) {
         clearInterval(intervalId.current);
         startTime.current = null;
@@ -216,6 +201,8 @@ useEffect(() => {
     clearInterval(intervalId.current);
   }
 }, [play, timeValue, currentTime]);
+
+
 
   useEffect(() => {
     const audioContexts = [];   // Create an array to hold the audio contexts
@@ -311,7 +298,11 @@ useEffect(() => {
 
             audios[index].addEventListener('canplaythrough', function() {
               // The audio is now playable, call the play method
-              this.play();
+              if (play) {
+                this.play();
+              } else {
+                this.pause();
+              }
             }, false);
           });
         }
