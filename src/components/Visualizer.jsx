@@ -127,6 +127,7 @@ const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setC
 
   const [showPlayButton, setShowPlayButton] = useState(false); 
   const [isPaused, setIsPaused] = useState(false);
+  const [resetTime, setResetTime] = useState(false);
 
   const startHasRun = useRef(false);
   
@@ -148,7 +149,7 @@ const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setC
 
    const handleCanvasClick = () => {
     setPlay(!play);
-    //setIsPaused(isPaused);   
+    setResetTime(true);
     console.log(play)
   };
 
@@ -183,24 +184,29 @@ useEffect(() => {
   }
 }, [selectedMusics, timeValue, isPaused]); 
 
-
-//this is where i need to edit for the pause
 useEffect(() => {
   if (play) {
     startTime.current = Date.now() - currentTime * 1000;
     intervalId.current = setInterval(() => {
-    const newTime = (Date.now() - startTime.current) / 1000;
+      const newTime = (Date.now() - startTime.current) / 1000;
       if (newTime >= timeValue) {
         clearInterval(intervalId.current);
-        startTime.current = null;
+        if (selectedMusics.length < 1 || resetTime) {
+          startTime.current = null;
+          setResetTime(false);
+        }
       } else {
         setCurrentTime(newTime);
       }
     }, 50);
   } else {
     clearInterval(intervalId.current);
+    if (selectedMusics.length < 1 || resetTime) {
+      startTime.current = null;
+      setResetTime(false);
+    }
   }
-}, [play, timeValue, currentTime]);
+}, [play, timeValue, selectedMusics, resetTime]);
 
 
 
