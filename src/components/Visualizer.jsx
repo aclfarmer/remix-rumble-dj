@@ -184,6 +184,13 @@ useEffect(() => {
   }
 }, [selectedMusics, timeValue, isPaused]); 
 
+//did it work?
+/*
+In this updated code, startTime.current is only set to null if selectedMusic.length is less than 1 or resetTime is true. This means that startTime.current will not be reset 
+if there are still items in the selectedMusic array and the canvas was not clicked.
+ Also, resetTime is added to the dependencies of the useEffect hook, so the hook will run whenever resetTime changes.
+*/
+
 useEffect(() => {
   if (play) {
     startTime.current = Date.now() - currentTime * 1000;
