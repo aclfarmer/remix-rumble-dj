@@ -2,7 +2,7 @@ import React, {useState, useContext, useEffect} from 'react'
 import { SwitchContext } from '../context';
 import './InformationBar.css'
 
-const InformationBar = ({ handleSwitch, currentTime, selectedMusics, timeValue}) => {
+const InformationBar = ({ handleSwitch, currentTime, selectedMusics, timeValue, handleTimeUpdate}) => {
   const [clicked, setClicked] = useState(false);
   const [text, setText] = useState('Early');
   const { switchTriggered, setSwitchTriggered } = useContext(SwitchContext);
@@ -20,6 +20,13 @@ const InformationBar = ({ handleSwitch, currentTime, selectedMusics, timeValue})
 
   const handleSwitchTriggeredChange = () => {
     setSwitchTriggered(!switchTriggered);
+  };
+
+  const handleBarClick = (e) => {
+    const barWidth = e.currentTarget.offsetWidth;
+    const clickPosition = e.nativeEvent.offsetX;
+    const newTime = (clickPosition / barWidth) * timeValue;
+    handleTimeUpdate(newTime);
   };
 
   return (
@@ -43,8 +50,9 @@ const InformationBar = ({ handleSwitch, currentTime, selectedMusics, timeValue})
             <span style={{fontWeight: 'bold'}}>Music:</span> <span style={{ color: selectedMusics.length === 5 ? 'red' : 'white' }}>{selectedMusics.length}/5</span>
         </div>
       </div>
-      <div className='informationBar_fullBar'>
+      <div className='informationBar_fullBar' onClick={handleBarClick}>
         <div className='informationBar_timeBar' style={{ '--progress': `${(currentTime / timeValue) * 100}%` }}></div>
+        {currentTime > 0 && <div className='informationBar_circle' style={{ '--progress': `${(currentTime / timeValue) * 100}%` }}></div>}
       </div>
     </div>
   );

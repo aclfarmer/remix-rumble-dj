@@ -19,6 +19,10 @@ const Dashboard = ({ selectedMusics, setSelectedMusics, musicButtonId, setMusicB
   const handleSwitch = () => {
     setSwitchTriggered(true);
   };
+
+  const handleTimeUpdate = (newTime) => {
+    setCurrentTime(newTime);
+  };
     
   return (
     <div className='dashboard-container'>
@@ -34,8 +38,23 @@ const Dashboard = ({ selectedMusics, setSelectedMusics, musicButtonId, setMusicB
           />
       </div>
       <div className='dashboard-audio-visualizer-container'>
-        <InformationBar handleSwitch={handleSwitch} switchTriggered={switchTriggered} currentTime={currentTime} selectedMusics={selectedMusics} timeValue={timeValue}/>
-        <Visualizer selectedMusics={selectedMusics} play={play} setPlay={setPlay} timeValue={timeValue} currentTime={currentTime} setCurrentTime={setCurrentTime} musicButtonId={musicButtonId}/>
+        <InformationBar 
+          handleSwitch={handleSwitch} 
+          switchTriggered={switchTriggered} 
+          currentTime={currentTime} 
+          selectedMusics={selectedMusics} 
+          timeValue={timeValue}
+          handleTimeUpdate={handleTimeUpdate}
+        />
+        <Visualizer 
+          selectedMusics={selectedMusics} 
+          play={play} setPlay={setPlay} 
+          timeValue={timeValue} 
+          currentTime={currentTime} 
+          setCurrentTime={setCurrentTime} 
+          musicButtonId={musicButtonId}
+          handleTimeUpdate = {handleTimeUpdate}
+        />
       </div>
     </div>
   )

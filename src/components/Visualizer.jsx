@@ -120,8 +120,8 @@ function drawVisualizer(canvas, ctx, rotation, bufferLength, barWidth, dataArray
 }
 
 
-const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setCurrentTime, musicButtonId }) => {
-  const audioRef = useRef([]); // Create a ref for the audio element
+const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setCurrentTime, musicButtonId, handleTimeUpdate }) => {
+  const audioRef = useRef([]); // ref for the audio element
   const canvasRef = useRef(null); //ref for canvas
   const rotation = useRef(0); //holds rotation of visualizer
 
@@ -129,8 +129,13 @@ const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setC
   const [isPaused, setIsPaused] = useState(false);
   const [resetTime, setResetTime] = useState(false);
 
+  // Declare startTime outside of the useEffect hook
+  const startTime = useRef(null);
+  const intervalId = useRef(null);
+
   const startHasRun = useRef(false);
   
+  //useEffect1
   useEffect(() => {
     // New useEffect hook that runs on load and whenever musicButtonId changes
     if (!startHasRun.current && musicButtonId.length > 0 && selectedMusics.length == 0) {
@@ -153,10 +158,24 @@ const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setC
     console.log(play)
   };
 
-// Declare startTime outside of the useEffect hook
-const startTime = useRef(null);
-const intervalId = useRef(null);
 
+  //useEffect2
+
+  //MAYBE
+  useEffect(() => {
+    if (audioRef.current) {
+      const audio = audioRef.current;
+      if (play==true) {
+        setPlay(false);
+        audio.currentTime = currentTime;
+        setPlay(true);
+      } else {
+        audio.currentTime = currentTime;
+      }
+    }
+  }, [currentTime]);
+
+  //useEffect3
 useEffect(() => {
   if (selectedMusics.length > 0) {
     // Start the timer only if selectedMusics is not empty and the audio is not paused
@@ -184,13 +203,7 @@ useEffect(() => {
   }
 }, [selectedMusics, timeValue, isPaused]); 
 
-//did it work?
-/*
-In this updated code, startTime.current is only set to null if selectedMusic.length is less than 1 or resetTime is true. This means that startTime.current will not be reset 
-if there are still items in the selectedMusic array and the canvas was not clicked.
- Also, resetTime is added to the dependencies of the useEffect hook, so the hook will run whenever resetTime changes.
-*/
-
+//useEffect4
 useEffect(() => {
   if (play) {
     startTime.current = Date.now() - currentTime * 1000;
@@ -215,6 +228,12 @@ useEffect(() => {
   }
 }, [play, timeValue, resetTime]);
 
+//useEffect5
+useEffect(() => {
+  if (selectedMusics.length > 0) {
+    setPlay(true);
+  }
+}, [selectedMusics]);
 
 
   useEffect(() => {

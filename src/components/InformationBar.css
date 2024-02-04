@@ -4,7 +4,8 @@
 }
 
 .informationBar_fullBar {
-  height: 3px;
+  position: relative;
+  height: 4px;
   background: linear-gradient(
     to right, 
     #69c4a7 0%, 
@@ -21,16 +22,44 @@
   width: 100%;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
+  transition: height 0.1s ease-in-out, padding-bottom 0.1s ease-in-out;
+  box-sizing: border-box;
+}
+
+.informationBar_fullBar:hover {
+  height: 8px; 
+  padding-bottom: 4px;
+  cursor: pointer;
 }
 
 .informationBar_timeBar {
-  height: 3px;
+  height: 4px;
   width: 100%;
   background: #707070;
   mask-image: linear-gradient(to right, transparent var(--progress, 0%), black var(--progress, 0%));
   -webkit-mask-image: linear-gradient(to right, transparent var(--progress, 0%), black var(--progress, 0%));
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
+  position: relative;
+  transition: height 0.1s ease-in-out, padding-bottom 0.1s ease-in-out;
+  box-sizing: border-box;
+}
+
+.informationBar_timeBar:hover {
+  height: 8px; 
+  padding-bottom: 4px;
+  cursor: pointer;
+}
+
+.informationBar_circle {
+  position: absolute;
+  right: calc(100% - var(--progress) - 6px); 
+  top: 50%;
+  transform: translateY(-50%); 
+  width: 8px;
+  height: 8px;
+  border-radius: 50%; 
+  background-color: #ffffff; 
 }
 
 .informationBar {
@@ -117,3 +146,4 @@
   .switch-button-slider-text.left {
     transform: translateX(0%); /* Move to the left */
   }
+  
