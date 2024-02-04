@@ -198,7 +198,7 @@ useEffect(() => {
       const newTime = (Date.now() - startTime.current) / 1000;
       if (newTime >= timeValue) {
         clearInterval(intervalId.current);
-        if (selectedMusics.length < 1 || resetTime) {
+        if (resetTime) {
           startTime.current = null;
           setResetTime(false);
         }
@@ -208,12 +208,12 @@ useEffect(() => {
     }, 50);
   } else {
     clearInterval(intervalId.current);
-    if (selectedMusics.length < 1 || resetTime) {
+    if (resetTime) {
       startTime.current = null;
       setResetTime(false);
     }
   }
-}, [play, timeValue, selectedMusics, resetTime]);
+}, [play, timeValue, resetTime]);
 
 
 
