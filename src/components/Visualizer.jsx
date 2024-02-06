@@ -161,19 +161,6 @@ const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setC
 
   //useEffect2
 
-  //MAYBE
-  useEffect(() => {
-    if (audioRef.current) {
-      const audio = audioRef.current;
-      if (play==true) {
-        setPlay(false);
-        audio.currentTime = currentTime;
-        setPlay(true);
-      } else {
-        audio.currentTime = currentTime;
-      }
-    }
-  }, [currentTime]);
 
   //useEffect3
 useEffect(() => {

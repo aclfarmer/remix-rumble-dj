@@ -21,7 +21,11 @@ const Dashboard = ({ selectedMusics, setSelectedMusics, musicButtonId, setMusicB
   };
 
   const handleTimeUpdate = (newTime) => {
-    setCurrentTime(newTime);
+    if (play) {
+      setPlay(false);
+      setCurrentTime(newTime);
+      setTimeout(() => setPlay(true), 0);
+    }
   };
     
   return (
