@@ -120,7 +120,7 @@ function drawVisualizer(canvas, ctx, rotation, bufferLength, barWidth, dataArray
 }
 
 
-const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setCurrentTime, musicButtonId, handleTimeUpdate }) => {
+const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setCurrentTime, musicButtonId, handleTimeUpdate, isSettingTime }) => {
   const audioRef = useRef([]); // ref for the audio element
   const canvasRef = useRef(null); //ref for canvas
   const rotation = useRef(0); //holds rotation of visualizer
@@ -153,16 +153,16 @@ const Visualizer = ({selectedMusics, play, setPlay, timeValue, currentTime, setC
    };
 
    const handleCanvasClick = () => {
-    setPlay(!play);
-    setResetTime(true);
-    console.log(play)
+    if (selectedMusics.length > 0) {
+      clearInterval(intervalId.current); // Clear the interval
+      setPlay(!play);
+      setResetTime(true);
+      console.log(play);
+      intervalId.current = setInterval(50); // Restart the interval
+    }
   };
 
-
-  //useEffect2
-
-
-  //useEffect3
+//useEffect3
 useEffect(() => {
   if (selectedMusics.length > 0) {
     // Start the timer only if selectedMusics is not empty and the audio is not paused
@@ -178,7 +178,10 @@ useEffect(() => {
           clearInterval(intervalId.current);
           startTime.current = null;
         } else {
-          setCurrentTime(newTime);
+          // Check isSettingTime before updating currentTime
+          if (!isSettingTime.current) {
+            setCurrentTime(newTime);
+          }
         }
       }
     }, 50);

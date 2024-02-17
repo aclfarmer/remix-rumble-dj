@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 
 import './Dashboard.css'
 
@@ -15,18 +15,33 @@ const Dashboard = ({ selectedMusics, setSelectedMusics, musicButtonId, setMusicB
   const [currentTime, setCurrentTime] = useState(0);
   //Early-Late game switch trigger (chnages songs and timer) passed up from InformationBar
 
+  const isSettingTime = useRef(false);
 
   const handleSwitch = () => {
     setSwitchTriggered(true);
   };
 
   const handleTimeUpdate = (newTime) => {
+    isSettingTime.current = true; // Set isSettingTime to true
+    setCurrentTime(newTime);
     if (play) {
       setPlay(false);
-      setCurrentTime(newTime);
-      setTimeout(() => setPlay(true), 0);
+      setTimeout(() => {
+        setPlay(true);
+        isSettingTime.current = false; // Reset isSettingTime to false
+      }, 0);
+    } else {
+      isSettingTime.current = false; // Reset isSettingTime to false
     }
   };
+
+  useEffect(() => {
+    if (isSettingTime.current) {
+      setPlay(true);
+      isSettingTime.current = false; // Reset isSettingTime to false
+    }
+  }, [currentTime]);
+  
     
   return (
     <div className='dashboard-container'>
@@ -58,6 +73,7 @@ const Dashboard = ({ selectedMusics, setSelectedMusics, musicButtonId, setMusicB
           setCurrentTime={setCurrentTime} 
           musicButtonId={musicButtonId}
           handleTimeUpdate = {handleTimeUpdate}
+          isSettingTime={isSettingTime}
         />
       </div>
     </div>
