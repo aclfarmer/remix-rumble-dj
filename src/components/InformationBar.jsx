@@ -38,7 +38,8 @@ const InformationBar = ({ handleSwitch, currentTime, selectedMusics, timeValue, 
     const mousePosition = e.nativeEvent.offsetX;
     const newTime = (mousePosition / barWidth) * timeValue;
     setHoverTime(newTime);
-    setSeekerPosition(mousePosition);
+    const mousePositionFromRight = barWidth - e.nativeEvent.offsetX;
+    setSeekerPosition(mousePositionFromRight);
   };
 
   const handleMouseLeave = () => {
